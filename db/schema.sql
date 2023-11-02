@@ -4,7 +4,7 @@ CREATE DATABASE employee_tracker_db;
 
 USE employee_tracker_db;
 
--- TODO: Create department database with:
+-- DONE: Create department database with:
   -- id INT PRIMARY KEY
   -- department_name VARCHAR(30)
 CREATE TABLE department (
@@ -12,7 +12,7 @@ CREATE TABLE department (
   name VARCHAR(30) NOT NULL
 );
 
--- TODO: Create role database with:
+-- DONE: Create role database with:
   -- id INT PRIMARY KEY
   -- title VARCHAR(30)
   -- salary DECIMAL
@@ -27,7 +27,7 @@ CREATE TABLE role (
     ON DELETE SET NULL
 );
 
--- TODO: Create employee database with:
+-- DONE: Create employee database with:
   -- id INT PRIMARY KEY
   -- first_name VARCHAR(30)
   -- last_name VARCHAR(30)
