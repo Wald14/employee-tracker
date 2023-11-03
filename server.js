@@ -15,60 +15,112 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// Default response for any other request (Not Found)
-app.use((req, res) => {
-  res.status(404).end();
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
 
 // TODO: Present user with options
+
+const listOfOptions = [
+  {
+    type: 'list',
+    message: 'What would you like to do?',
+    name: 'optionPicked',
+    choices: [
+      {
+        name: 'View all Departments',
+        value: 'viewDepartments'      
+      },
+      {
+        name: 'View all Roles',
+        value: 'viewRoles'      
+      },
+      {
+        name: 'View all Employees',
+        value: 'viewEmployees'         
+      },
+      {
+        name: 'Quit',
+        value: 'quit'         
+      }
+      ]
+  }
+]
+
+async function start() {
+  const answer = await inquirer.prompt(listOfOptions)
+  switch(answer.optionPicked){
+    case 'viewDepartments':
+      getAllDepartments()
+      break;
+    
+    case 'viewRoles':
+      getAllRoles()
+      break;
+    
+    case 'viewEmployees':
+      getAllEmployees()
+      break;
+    
+    case 'quit':
+      process.exit()
+  }
+}
+start();
   
-  // TODO: View all departments
-      // DONE: Run query for the whole department SQL table
-        db.query('SELECT * FROM department', function(err, results){
-            printTable(results)
-        })
+// DONE: VIEW ALL DEPARTMENTS
+  // DONE: Run query for the whole department SQL table
+function getAllDepartments(){
+  db.query(`
+    SELECT * FROM department`, 
+    function(err, results){
+      printTable(results)
+      start()
+  })
+}
 
-  // TODO: View all roles
-      // DONE: Run query for the whole role SQL table
-      // TODO: Make it do that names populate in replacement of keys 
-        db.query('SELECT * FROM role', function(err, results){
-            printTable(results)
-        })
+// DONE: VIEW ALL ROLES
+  // DONE: Run query for the whole role SQL table
+function getAllRoles(){
+  db.query(`
+    SELECT role.id, role.title, department.name, role.salary 
+    FROM role 
+    INNER JOIN department ON role.department_id = department.id`, 
+    function(err, results){
+      printTable(results)
+      start()
+  })
+}
 
-  // TODO: View all empoyees
-      // DONE: Run query for the whole empoyee SQL table
-      // TODO: Make it do that names populate in replacement of keys 
-        db.query('SELECT * FROM employee', function(err, results){
-            printTable(results)
-        })
+// DONE:VIEW ALL EMPLOYEES
+  // DONE: Run query for the whole empoyee SQL table
+function getAllEmployees(){
+  db.query(`
+    SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, concat(manager.first_name,' ',manager.last_name) as manager_name
+    FROM employee employee
+    INNER JOIN role ON employee.role_id = role.id
+    INNER JOIN department ON role.department_id = department.id
+    LEFT OUTER  JOIN employee manager ON employee.manager_id = manager.id `, 
+    function(err, results){
+      printTable(results)
+      start()
+  })
+}
 
-  // TODO: Add a department
-      // TODO: Prompt user for department name
-      // TODO: Run query for a list of all the department_names
-      //----------------------------------------------------
-      // This where classes would come into play?
-      //----------------------------------------------------
-      // TODO: Compare user entry to department_name list to make sure it doesn't already exist
-          // TODO: If it does exist, console.log(`${user-entry} is already a department`)
-          // TODO: If it doesn't exist, add it to the department database
+// TODO: Add a department
+  // TODO: Prompt user for department name
+  // TODO: Run query for a list of all the department_names
+  // TODO: Compare user entry to department_name list to make sure it doesn't already exist
+    // TODO: If it does exist, console.log(`${user-entry} is already a department`)
+    // TODO: If it doesn't exist, add it to the department database
 
 
-  // TODO: Add a role
-      // TODO: Prompt user for role name
-          // TODO: Compare user entry to role_name list to make sure it doesn't already exist
-          // TODO: If it does exist, console.log(`${user-entry} is already a department`)
-          // TODO: If it doesn't exist, continue
-      // TODO: Prompt user for salary
-      // TODO: Present user with a list of departments to add to
-          // TODO: Run query for a list of all the department_names
-      //----------------------------------------------------
-      // This where classes would come into play?
-      //----------------------------------------------------
-      //  TODO: assign user input to variables and enter that into SQL table
+// TODO: Add a role
+  // TODO: Prompt user for role name
+    // TODO: Compare user entry to role_name list to make sure it doesn't already exist
+    // TODO: If it does exist, console.log(`${user-entry} is already a department`)
+    // TODO: If it doesn't exist, continue
+  // TODO: Prompt user for salary
+  // TODO: Present user with a list of departments to add to
+    // TODO: Run query for a list of all the department_names
+  //  TODO: assign user input to variables and enter that into SQL table
 
   // TODO: Add an employee
       // TODO: Prompt user for employee first name
@@ -77,9 +129,6 @@ app.listen(PORT, () => {
           // TODO: Run query for list of all roles
       // TODO: Present user with a list of managers to pick from
           // TODO: Run query for list of all employees who have NULL as their manager
-      //----------------------------------------------------
-      // This where classes would come into play?
-      //----------------------------------------------------   
       // TODO: assign user input to variables and enter that into SQL table
 
   // TODO: Quit (ends the program)
@@ -99,4 +148,3 @@ BONUS
   - View the total utilized budge of a department
       + aka the combined salaries of all employees in that department
 */
-
