@@ -1,9 +1,10 @@
 // Import and require express, inquirer, mysql2, dotenv, and db
 const express = require('express');
-const inquirer = require("inquirer")
+const inquirer = require('inquirer');
 const mysql = require('mysql2');
 require('dotenv').config();
 const db = require('./config/connection')
+const {printTable} = require('console-table-printer');
 
 // Specify on which port the Express.js server will run
 const PORT = process.env.PORT || 3001;
@@ -26,16 +27,24 @@ app.listen(PORT, () => {
 // TODO: Present user with options
   
   // TODO: View all departments
-      // TODO: Run query for the whole department SQL table
-      // db.query('SELECT * FROM department', function(err, results){
-      //   console.log(results)
-      // })
+      // DONE: Run query for the whole department SQL table
+        db.query('SELECT * FROM department', function(err, results){
+            printTable(results)
+        })
 
   // TODO: View all roles
-      // TODO: Run query for the whole role SQL table
+      // DONE: Run query for the whole role SQL table
+      // TODO: Make it do that names populate in replacement of keys 
+        db.query('SELECT * FROM role', function(err, results){
+            printTable(results)
+        })
 
   // TODO: View all empoyees
-      // TODO: Run query for the whole empoyee SQL table
+      // DONE: Run query for the whole empoyee SQL table
+      // TODO: Make it do that names populate in replacement of keys 
+        db.query('SELECT * FROM employee', function(err, results){
+            printTable(results)
+        })
 
   // TODO: Add a department
       // TODO: Prompt user for department name
@@ -46,6 +55,7 @@ app.listen(PORT, () => {
       // TODO: Compare user entry to department_name list to make sure it doesn't already exist
           // TODO: If it does exist, console.log(`${user-entry} is already a department`)
           // TODO: If it doesn't exist, add it to the department database
+
 
   // TODO: Add a role
       // TODO: Prompt user for role name
