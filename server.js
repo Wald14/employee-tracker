@@ -143,15 +143,15 @@ function addDepartment() {
       name: 'newDepartment',
     }
   ])
-  .then((answer) => {
-    db.query(`
+    .then((answer) => {
+      db.query(`
       INSERT INTO department (name) Values ('${answer.newDepartment}')
     `,
-    function (err, res) {
-      console.log(`${answer.newDepartment} has been added as a new department`)
-      start()
+        function (err, res) {
+          console.log(`${answer.newDepartment} has been added as a new department`)
+          start()
+        })
     })
-  })
 }
 
 
@@ -165,18 +165,21 @@ function addDepartment() {
 // TODO: Run query for a list of all the department_names
 //  TODO: assign user input to variables and enter that into SQL table
 async function addRole() {
-  const answer = await inquirer.prompt([
+  let select = 'id as value, name'
+  let from = 'department'
+  const departmentOptions = await returnTable(select, from);
+
+  inquirer.prompt([
     {
       type: 'input',
       message: 'What role would you like to add?',
       name: 'newRole',
-    }
-  ])
-  let select = 'id as value, name'
-  let from = 'department'
-  const departmentOptions = await returnTable(select, from);
-  // console.log(rows)
-  const pickedDepartment = await inquirer.prompt([
+    },
+    {
+      type: 'input: number',
+      message: 'What is the salary of this role?',
+      name: 'newSalary',
+    },
     {
       type: 'list',
       message: 'What department would you like to add this role to?',
@@ -184,6 +187,20 @@ async function addRole() {
       choices: departmentOptions
     }
   ])
+  .then((answers) => {
+  console.log(answers)
+  console.log(`title: ${answers.newRole}`)
+  console.log(`salary: ${answers.newSalary}`)
+  console.log(`department_id: ${answers.pickedDepartment}`)
+  db.query(`
+    INSERT INTO role (title, salary, department_id) 
+    VALUES ('${answers.newRole}', ${parseInt(answers.newSalary)}, ${answers.pickedDepartment});
+    `,
+    function (err, res) {
+      console.log(`${answers.newRole} with a salary of ${answers.newSalary} has been added to the ${answers.pickedDepartment} department`)
+      start()
+    })
+  })
 }
 
 // async function addRole() {
@@ -192,20 +209,36 @@ async function addRole() {
 //       type: 'input',
 //       message: 'What role would you like to add?',
 //       name: 'newRole',
-//     }
+//     },
+//     {
+//       type: 'input',
+//       message: 'What is the salary of this role?',
+//       name: 'newSalary',
+//     },
 //   ])
-//   const promiseDB = db.promise();
-//   const [rows] = await promiseDB.query('SELECT id as value, name FROM department');
+//   let select = 'id as value, name'
+//   let from = 'department'
+//   const departmentOptions = await returnTable(select, from);
 //   // console.log(rows)
-//   printTable(rows)
 //   const pickedDepartment = await inquirer.prompt([
 //     {
 //       type: 'list',
 //       message: 'What department would you like to add this role to?',
 //       name: 'pickedDepartment',
-//       choices: rows
+//       choices: departmentOptions
 //     }
 //   ])
+//   console.log(`title: ${answer.newRole}`)
+//   console.log(`salary: ${answer.newSalary}`)
+//   console.log(`department_id: ${pickedDepartment.pickedDepartment}`)
+//   db.query(`
+//     INSERT INTO role (title, salary, department_id) 
+//     VALUES ('${answer.newRole}', ${answer.salary}, ${ pickedDepartment.pickedDepartment});
+//     `,
+//     function (err, res) {
+//       console.log(`${answer.newRole} with a salary of ${answer.newSalary} has been added to the ${pickedDepartment.pickedDepartment} department`)
+//       start()
+//     })
 // }
 
 
