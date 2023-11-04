@@ -8,6 +8,7 @@ const { printTable } = require('console-table-printer');
 
 const { returnTable, viewAllDepartments, viewAllRoles, viewAllEmployees } = require('./db/viewAll_queries')
 const { addDepartment, addRole, addEmployee } = require('./db/add_queries')
+const { updateManager } = require('./db/manager_update')
 
 // Specify on which port the Express.js server will run
 const PORT = process.env.PORT || 3001;
@@ -52,6 +53,10 @@ const listOfOptions = [
         value: 'addEmployee'
       },
       {
+        name: "Update an Employee's Manager",
+        value: 'updateManager'
+      },
+      {
         name: 'Quit',
         value: 'quit'
       }
@@ -75,19 +80,28 @@ async function start() {
 
     case 'viewEmployees':
       const employeeData = await viewAllEmployees()
+      await viewAllEmployees()
       printTable(employeeData)
       break;
 
     case 'addDepartment':
-      const newDepartment = await addDepartment()
+      // const newDepartment = await addDepartment()
+      await addDepartment()
       break;
 
     case 'addRole':
-      const newRole = await addRole()
+      // const newRole = await addRole()
+      await addRole()
       break;
 
     case 'addEmployee':
-      const newEmployee = await addEmployee()
+      // const newEmployee = await addEmployee()
+      await addEmployee()
+      break;
+
+    case 'updateManager':
+      // const changeManager = await updateManager()
+      await updateManager()
       break;
 
     case 'quit':
