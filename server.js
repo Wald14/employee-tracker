@@ -98,20 +98,15 @@ async function start() {
 start();
 
 
-// DONE: VIEW ALL DEPARTMENTS
-
-// DONE: VIEW ALL ROLES
-
-// DONE:VIEW ALL EMPLOYEES
-
-// DONE: ADD A DEPARTMENT
-
-// DONE: ADD A ROLE
-//      TODO: Check if the role already exists in specific department vs just in general
-
+// DONE:  VIEW ALL DEPARTMENTS
+// DONE:  VIEW ALL ROLES
+// DONE:  VIEW ALL EMPLOYEES
+// DONE:  ADD A DEPARTMENT
+// DONE:  ADD A ROLE
+        // TODO: Check if the role already exists in specific department vs just in general
 // DONE: Add an employee
-
 // DONE: Quit (ends the program)
+
 
 
 /*

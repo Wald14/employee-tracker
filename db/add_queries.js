@@ -4,7 +4,7 @@ require('dotenv').config();
 const db = require('../config/connection')
 const inquirer = require('inquirer');
 
-const { returnTable, viewAllDepartments, viewAllRoles, viewAllEmployees } = require('./viewAll_queries')
+const { returnTable, viewAllDepartments, viewAllRoles } = require('./viewAll_queries')
 
 
 // Validators for inquirer prompts
@@ -117,11 +117,12 @@ async function addEmployee(){
   let select = 'id as value, title as name'
   let from = 'role'
   const roleList = await returnTable(select, from)
-  // Query for all roles for role prompt
+  // Query for all managers for manager prompt
   select = 'id as value, concat(first_name," ",last_name) as name'
   from = 'employee'
   let extension = 'WHERE manager_id is null'
   const managerList = await returnTable(select, from, extension)
+  managerList.push({value: null, name: 'None'})
 
   // Prompt user for info
   const answer = await inquirer.prompt([
@@ -145,13 +146,12 @@ async function addEmployee(){
     },
     {
       type: 'list',
-      message: "Who is the manager for this employee?",
+      message: "Who is the manager for this employee? Select 'None' if this employee is a manager",
       name: 'pickedManager',
       choices: managerList
     }
   ])
   .then((res) => {
-    console.log(res)
     db.query(`
     INSERT INTO employee (first_name, last_name, role_id, manager_id) 
     VALUES ('${res.firstName}', '${res.lastName}', ${res.pickedRole}, ${res.pickedManager});`)
@@ -160,15 +160,13 @@ async function addEmployee(){
     // Grab name of manger selected for console.log response
     const managerName = (managerList.find(managerList => managerList.value === res.pickedManager)).name
     // Console log confirmation
-    console.log(`\n${res.firstName} ${res.lastName} has been as a new emplopyee with the role of ${roleTitle} and reports to ${managerName}!\n`)
+    if (managerName === 'None'){
+      console.log(`\n${res.firstName} ${res.lastName} has been as a new emplopyee with the role of ${roleTitle} and is a manager!\n`)
+    } else {
+      console.log(`\n${res.firstName} ${res.lastName} has been as a new emplopyee with the role of ${roleTitle} and reports to ${managerName}!\n`)
+    }
     return;
   })
 }
-
-
-
-
-
-
 
 module.exports = { addDepartment, addRole, addEmployee };
