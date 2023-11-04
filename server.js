@@ -7,7 +7,7 @@ const db = require('./config/connection')
 const { printTable } = require('console-table-printer');
 
 const { returnTable, viewAllDepartments, viewAllRoles, viewAllEmployees } = require('./db/viewAll_queries')
-const { addDepartment } = require('./db/add_queries')
+const { addDepartment, addRole } = require('./db/add_queries')
 
 // Specify on which port the Express.js server will run
 const PORT = process.env.PORT || 3001;
@@ -79,7 +79,7 @@ async function start() {
       break;
 
     case 'addRole':
-      addRole()
+      const newRole = await addRole()
       break;
 
     case 'quit':
@@ -117,44 +117,44 @@ start();
 // DONE: Present user with a list of departments to add to
 // DONE: Run query for a list of all the department_names
 //  DONE: assign user input to variables and enter that into SQL table
-async function addRole() {
-  let select = 'id as value, name'
-  let from = 'department'
-  const departmentOptions = await returnTable(select, from);
+// async function addRole() {
+//   let select = 'id as value, name'
+//   let from = 'department'
+//   const departmentOptions = await returnTable(select, from);
 
-  inquirer.prompt([
-    {
-      type: 'input',
-      message: 'What role would you like to add?',
-      name: 'newRole',
-    },
-    {
-      type: 'input: number',
-      message: 'What is the salary of this role?',
-      name: 'newSalary',
-    },
-    {
-      type: 'list',
-      message: 'What department would you like to add this role to?',
-      name: 'pickedDepartment',
-      choices: departmentOptions
-    }
-  ])
-  .then((answers) => {
-  console.log(answers)
-  console.log(`title: ${answers.newRole}`)
-  console.log(`salary: ${answers.newSalary}`)
-  console.log(`department_id: ${answers.pickedDepartment}`)
-  db.query(`
-    INSERT INTO role (title, salary, department_id) 
-    VALUES ('${answers.newRole}', ${parseInt(answers.newSalary)}, ${answers.pickedDepartment});
-    `,
-    function (err, res) {
-      console.log(`${answers.newRole} with a salary of ${answers.newSalary} has been added to the ${answers.pickedDepartment} department`)
-      start()
-    })
-  })
-}
+//   inquirer.prompt([
+//     {
+//       type: 'input',
+//       message: 'What role would you like to add?',
+//       name: 'newRole',
+//     },
+//     {
+//       type: 'input: number',
+//       message: 'What is the salary of this role?',
+//       name: 'newSalary',
+//     },
+//     {
+//       type: 'list',
+//       message: 'What department would you like to add this role to?',
+//       name: 'pickedDepartment',
+//       choices: departmentOptions
+//     }
+//   ])
+//   .then((answers) => {
+//   console.log(answers)
+//   console.log(`title: ${answers.newRole}`)
+//   console.log(`salary: ${answers.newSalary}`)
+//   console.log(`department_id: ${answers.pickedDepartment}`)
+//   db.query(`
+//     INSERT INTO role (title, salary, department_id) 
+//     VALUES ('${answers.newRole}', ${parseInt(answers.newSalary)}, ${answers.pickedDepartment});
+//     `,
+//     function (err, res) {
+//       console.log(`${answers.newRole} with a salary of ${answers.newSalary} has been added to the ${answers.pickedDepartment} department`)
+//       start()
+//     })
+//   })
+// }
 
 
 // TODO: Add an employee
