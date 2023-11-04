@@ -35,8 +35,10 @@ async function addDepartment() {
     }
   ])
   .then((res) => {
-    // Makes sure the department doesn't already exist
+    // Clean up responses
     const newDep = res.name.trim();
+
+    // Makes sure the department doesn't already exist
     const departmentIndex = departmentList.findIndex(departmentList => departmentList.name.toLowerCase() === newDep.toLowerCase())
     if (departmentIndex >= 0) {
       console.log(`\nThe ${departmentList[departmentIndex].name} department already exists. Select View All Departments to see which departments already exist.\n`)
@@ -80,12 +82,27 @@ async function addRole() {
       choices: departmentList
     }
   ])
-  .then((answers) => {
-    db.query(`
-      INSERT INTO role (title, salary, department_id) 
-      VALUES ('${answers.newRole}', ${parseInt(answers.newSalary)}, ${answers.pickedDepartment});
-      `,
-    )
+  .then((res) => {
+    // Clean up responses
+    const newRole = res.newRole.trim();
+    const newSal = res.newSalary.trim();
+    // Grab name of department selected for console.log response
+    const departmentName = (departmentList.find(departmentList => departmentList.value === res.pickedDepartment)).name
+    console.log(departmentName)
+    // Makes sure the role doesn't already exist
+    const roleIndex = roleList.findIndex( roleList => roleList.title.toLowerCase() === res.newRole.toLowerCase())
+    if (roleIndex >= 0) {
+      console.log(`\n${roleList[roleIndex].title} already exists as a role. Select View All Roles to see which roles already exist.\n`)
+    } else {
+    // If new, adds new role
+      db.query(`INSERT INTO role (title, salary, department_id) VALUES ('${res.newRole}', ${parseInt(newSal)}, ${res.pickedDepartment});`)
+      // Grab name of department selected for console.log response
+      const departmentName = (departmentList.find(departmentList => departmentList.value === res.pickedDepartment)).name
+      console.log(departmentName)
+      // Console log confirmation
+      console.log(`\n${newRole} has been added as a new role into the ${departmentName} department with a salary of ${parseInt(newSal)}!\n`)
+    }
+    return;
   })
 }
 

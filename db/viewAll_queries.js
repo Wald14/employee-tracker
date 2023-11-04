@@ -22,7 +22,7 @@ async function viewAllDepartments() {
 
 // Returns an array of all the roles as objects
 async function viewAllRoles() {
-  const select = 'role.id, role.title, department.name, role.salary '
+  const select = 'role.id, role.title, department.name as department, role.salary '
   const from = 'role'
   const extension = 'INNER JOIN department ON role.department_id = department.id'
   const table = await returnTable(select, from, extension);
