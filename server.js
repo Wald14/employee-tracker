@@ -1,4 +1,4 @@
-// Import and require express, inquirer, mysql2, dotenv, and db
+// Imports
 const express = require('express');
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
@@ -6,7 +6,8 @@ require('dotenv').config();
 const db = require('./config/connection')
 const { printTable } = require('console-table-printer');
 
-const { returnTable } = require('./js/getAllQueries')
+const { returnTable, viewAllDepartments, viewAllRoles, viewAllEmployees } = require('./db/viewAll_queries')
+const { addDepartment } = require('./db/add_queries')
 
 // Specify on which port the Express.js server will run
 const PORT = process.env.PORT || 3001;
@@ -28,11 +29,11 @@ const listOfOptions = [
     choices: [
       {
         name: 'View all Departments',
-        value: 'viewDepartments'
+        value: 'viewAllDepartments'
       },
       {
         name: 'View all Roles',
-        value: 'viewRoles'
+        value: 'viewAllRoles'
       },
       {
         name: 'View all Employees',
@@ -58,112 +59,64 @@ const listOfOptions = [
 async function start() {
   const answer = await inquirer.prompt(listOfOptions)
   switch (answer.optionPicked) {
-    case 'viewDepartments':
-      getAllDepartments()
-      console.log("DEPARTMENTS")
-      return;
+    case 'viewAllDepartments':
+      const departmentData = await viewAllDepartments()
+      printTable(departmentData)
+      break;
 
-    case 'viewRoles':
-      getAllRoles()
-      return;
+    case 'viewAllRoles':
+      const roleData = await viewAllRoles()
+      printTable(roleData)
+      break;
 
     case 'viewEmployees':
-      getAllEmployees()
-      return;
+      const employeeData = await viewAllEmployees()
+      printTable(employeeData)
+      break;
 
     case 'addDepartment':
-      addDepartment()
-      return;
+      const newDepartment = await addDepartment()
+      break;
 
     case 'addRole':
       addRole()
-      return;
+      break;
 
     case 'quit':
       process.exit()
   }
+  start();
 }
 start();
 
-// async function test(){
-//   console.log(await returnDepartmentsTable())
-// }
-// test();
 
 // DONE: VIEW ALL DEPARTMENTS
-// DONE: Run query for the whole department SQL table
-function getAllDepartments() {
-  db.query(`
-    SELECT * FROM department`,
-    function (err, res) {
-      printTable(res)
-      start()
-    })
-}
+//      DONE: Run query for the whole department SQL table
 
 // DONE: VIEW ALL ROLES
-// DONE: Run query for the whole role SQL table
-function getAllRoles() {
-  db.query(`
-    SELECT role.id, role.title, department.name, role.salary 
-    FROM role 
-    INNER JOIN department ON role.department_id = department.id`,
-    function (err, res) {
-      printTable(res)
-      start()
-    })
-}
+//      DONE: Run query for the whole role SQL table
 
 // DONE:VIEW ALL EMPLOYEES
-// DONE: Run query for the whole empoyee SQL table
-function getAllEmployees() {
-  db.query(`
-    SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, concat(manager.first_name,' ',manager.last_name) as manager_name
-    FROM employee employee
-    INNER JOIN role ON employee.role_id = role.id
-    INNER JOIN department ON role.department_id = department.id
-    LEFT OUTER  JOIN employee manager ON employee.manager_id = manager.id `,
-    function (err, res) {
-      printTable(res)
-      start()
-    })
-}
+//      DONE: Run query for the whole empoyee SQL table
 
-// TODO: Add a department
-// DONE: Prompt user for department name
-// TODO: Run query for a list of all the department_names
-// TODO: Compare user entry to department_name list to make sure it doesn't already exist
-// TODO: If it does exist, console.log(`${user-entry} is already a department`)
-// DONE: If it doesn't exist, add it to the department database
-function addDepartment() {
-  inquirer.prompt([
-    {
-      type: 'input',
-      message: 'What would you like to call the new Department?',
-      name: 'newDepartment',
-    }
-  ])
-    .then((answer) => {
-      db.query(`
-      INSERT INTO department (name) Values ('${answer.newDepartment}')
-    `,
-        function (err, res) {
-          console.log(`${answer.newDepartment} has been added as a new department`)
-          start()
-        })
-    })
-}
+
+// DONE: Add a department
+//      DONE: Prompt user for department name
+//      DONE: Run query for a list of all the department_names
+//      DONE: Compare user entry to department list to make sure it doesn't   already exist
+//      DONE: If it does exist, let user know and don't add
+//      DONE: If it doesn't exist, add it to the department database
 
 
 // TODO: Add a role
-// TODO: Prompt user for role name
+// DONE: Prompt user for role name
 // TODO: Compare user entry to role_name list to make sure it doesn't already exist
 // TODO: If it does exist, console.log(`${user-entry} is already a department`)
 // TODO: If it doesn't exist, continue
-// TODO: Prompt user for salary
-// TODO: Present user with a list of departments to add to
-// TODO: Run query for a list of all the department_names
-//  TODO: assign user input to variables and enter that into SQL table
+// DONE: Prompt user for salary
+// DONE: Present user with a list of departments to add to
+// DONE: Run query for a list of all the department_names
+//  DONE: assign user input to variables and enter that into SQL table
 async function addRole() {
   let select = 'id as value, name'
   let from = 'department'
@@ -202,44 +155,6 @@ async function addRole() {
     })
   })
 }
-
-// async function addRole() {
-//   const answer = await inquirer.prompt([
-//     {
-//       type: 'input',
-//       message: 'What role would you like to add?',
-//       name: 'newRole',
-//     },
-//     {
-//       type: 'input',
-//       message: 'What is the salary of this role?',
-//       name: 'newSalary',
-//     },
-//   ])
-//   let select = 'id as value, name'
-//   let from = 'department'
-//   const departmentOptions = await returnTable(select, from);
-//   // console.log(rows)
-//   const pickedDepartment = await inquirer.prompt([
-//     {
-//       type: 'list',
-//       message: 'What department would you like to add this role to?',
-//       name: 'pickedDepartment',
-//       choices: departmentOptions
-//     }
-//   ])
-//   console.log(`title: ${answer.newRole}`)
-//   console.log(`salary: ${answer.newSalary}`)
-//   console.log(`department_id: ${pickedDepartment.pickedDepartment}`)
-//   db.query(`
-//     INSERT INTO role (title, salary, department_id) 
-//     VALUES ('${answer.newRole}', ${answer.salary}, ${ pickedDepartment.pickedDepartment});
-//     `,
-//     function (err, res) {
-//       console.log(`${answer.newRole} with a salary of ${answer.newSalary} has been added to the ${pickedDepartment.pickedDepartment} department`)
-//       start()
-//     })
-// }
 
 
 // TODO: Add an employee
