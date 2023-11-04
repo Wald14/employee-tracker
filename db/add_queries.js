@@ -155,6 +155,18 @@ async function addEmployee(){
     db.query(`
     INSERT INTO employee (first_name, last_name, role_id, manager_id) 
     VALUES ('${res.firstName}', '${res.lastName}', ${res.pickedRole}, ${res.pickedManager});`)
+
+    // Grab name of role selected for console.log response
+    const roleTitle = (roleList.find(roleList => roleList.value === res.pickedRole)).name
+    // Grab name of manger selected for console.log response
+    const managerName = (managerList.find(managerList => managerList.value === res.pickedManager)).name
+
+    // Console log confirmation
+    console.log(`\n${res.firstName} ${res.lastName} has been as a new emplopyee with the role of ${roleTitle} and reports to ${managerName}!\n`)
+
+
+
+
     return;
   })
 }
