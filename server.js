@@ -1,14 +1,15 @@
-// Imports
+// Imports for package.json
 const express = require('express');
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
 require('dotenv').config();
-const db = require('./config/connection')
 const { printTable } = require('console-table-printer');
 
-const { returnTable, viewAllDepartments, viewAllRoles, viewAllEmployees } = require('./db/viewAll_queries')
-const { addDepartment, addRole, addEmployee } = require('./db/add_queries')
-const { updateManager } = require('./db/manager_update')
+// Imports from local files
+const db = require('./config/connection')
+const { viewAllDepartments, viewAllRoles, viewAllEmployees } = require('./utils/viewAll_queries')
+const { addDepartment, addRole, addEmployee } = require('./utils/add_queries')
+const { updateManager } = require('./utils/manager_update')
 
 // Specify on which port the Express.js server will run
 const PORT = process.env.PORT || 3001;
@@ -20,8 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 
-// TODO: Present user with options
-
+// Starting user options
 const listOfOptions = [
   {
     type: 'list',
@@ -40,6 +40,7 @@ const listOfOptions = [
         name: 'View all Employees',
         value: 'viewEmployees'
       },
+      new inquirer.Separator(),
       {
         name: 'Add a Department',
         value: 'addDepartment'
@@ -52,14 +53,17 @@ const listOfOptions = [
         name: 'Add an Employee',
         value: 'addEmployee'
       },
+      new inquirer.Separator(),
       {
         name: "Update an Employee's Manager",
         value: 'updateManager'
       },
+      new inquirer.Separator(),
       {
         name: 'Quit',
         value: 'quit'
-      }
+      },
+      new inquirer.Separator()
     ]
   }
 ]
@@ -109,24 +113,23 @@ async function start() {
   }
   start();
 }
+
+function displayStartup() {
+  // console.log("%c Ｅｍｐｌｏｙｅｅ Ｔｒａｃｋｅｒ\n", "color: #00FF00")
+  console.log('\x1b[33m%s\x1b[0m', 
+  ' -------------------------------\n Ｅｍｐｌｏｙｅｅ Ｔｒａｃｋｅｒ\n -------------------------------\n')
+}
+
+// Display startup (outside start functino so it only displays once)
+displayStartup();
 start();
 
-
-// DONE:  VIEW ALL DEPARTMENTS
-// DONE:  VIEW ALL ROLES
-// DONE:  VIEW ALL EMPLOYEES
-// DONE:  ADD A DEPARTMENT
-// DONE:  ADD A ROLE
-        // TODO: Check if the role already exists in specific department vs just in general
-// DONE: Add an employee
-// DONE: Quit (ends the program)
 
 
 
 /*
 BONUS
-  - Update employee manager
-        - prompt which manager with a list of all employees without a manager
+  - DONE Update employee manager
   - View employees by manager
         - prompt for which manager they'd like to view
         - present a table of that manager's employee's

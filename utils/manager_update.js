@@ -3,14 +3,8 @@ const mysql = require('mysql2');
 require('dotenv').config();
 const db = require('../config/connection')
 const inquirer = require('inquirer');
+const { returnTable } = require('./viewAll_queries')
 
-const { returnTable, viewAllDepartments, viewAllRoles, viewAllEmployees } = require('./viewAll_queries')
-
-
-// Find all employee
-// Find all managers
-// Prompt for employee to update
-// Update
 
 async function updateManager() {
   // Query for employees managers for manager prompt
