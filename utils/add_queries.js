@@ -45,7 +45,7 @@ async function addDepartment() {
     } else {
       // If new, adds new department
        db.query(`INSERT INTO department (name) Values ('${newDep}')`)
-       console.log(`\n${newDep} has been added as a new department!\n`)
+       console.log('\x1b[33m%s\x1b[0m', `\n${newDep} has been added as a new department!\n`)
     }
     return;
     })
@@ -104,7 +104,7 @@ async function addRole() {
       console.log(departmentName)
 
       // Console log confirmation
-      console.log(`\n${newRole} has been added as a new role into the ${departmentName} department with a salary of ${parseInt(newSal)}!\n`)
+      console.log('\x1b[33m%s\x1b[0m', `\n${newRole} has been added as a new role into the ${departmentName} department with a salary of ${parseInt(newSal)}!\n`)
     }
     return;
   })
@@ -163,7 +163,7 @@ async function addEmployee(){
     if (managerName === 'None'){
       console.log(`\n${res.firstName} ${res.lastName} has been as a new emplopyee with the role of ${roleTitle} and is a manager!\n`)
     } else {
-      console.log(`\n${res.firstName} ${res.lastName} has been as a new emplopyee with the role of ${roleTitle} and reports to ${managerName}!\n`)
+      console.log('\x1b[33m%s\x1b[0m', `\n${res.firstName} ${res.lastName} has been as a new emplopyee with the role of ${roleTitle} and reports to ${managerName}!\n`)
     }
     return;
   })
