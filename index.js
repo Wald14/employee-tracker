@@ -129,9 +129,6 @@ displayStartup();
 start();
 
 
-// TODO UPDATE EMPLOYEE ROLE
-
-
 /*
 BONUS
   - DONE Update employee manager

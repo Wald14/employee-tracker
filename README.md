@@ -20,9 +20,9 @@ This command-line application allows a buissness owner to view and manage the de
 
 ## Usage
 The user can start the applciation from the command line with node index.js. Upon start up, the user is presented with the following list of options, each offering a different service:
-- View All Departments = Presents the user with a table of all the department names
-- View All Roles = Presents the user with a table of all the roles, the department that role belongs to and what the salary is.
-- View All Employees = Presents the suer with a table of all of the employees. This includes their first and last name, title, department, salary, and manager's name. If the manager is blank, it means they are a manager.
+- View All Departments (Sorted by Name) = Presents the user with a table of all the department names
+- View All Roles (Sorted by Department Name) = Presents the user with a table of all the roles, the department that role belongs to and what the salary is.
+- View All Employees (Sorted by first name) = Presents the suer with a table of all of the employees. This includes their first and last name, title, department, salary, and manager's name. If the manager is blank, it means they are a manager.
 - Add a Department = User is asked which department they'd like to add. They aren't allowed to add a department with no name OR a department name that already exists. Upon completion, the terminal console logs a confirmation that the department has been added.
 - Add a Role = User is asked which role they'd like to add. They can not enter a role that already exists. Then they are asked for the salary of the employee, where they can only enter a number value or it will notify and reprompt the user. Then the user will be presented with a list of departments to add that role to. Upon completion, the terminal console logs a confirmation that the role has been added.
 - Add an Employee = User is asked to enter the employee's first name and then their last name. Then they are presented with a list of all the existing roles to pick from. Then they are presented with a list of managers (all employee's that don't have a manager of their own). They have the option to pick "none" if the new employee is a manager. Upon completion, the terminal console logs a confirmation that the employee has been added.
