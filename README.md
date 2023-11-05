@@ -21,12 +21,19 @@ This command-line application allows a buissness owner to view and manage the de
 ## Usage
 The user can start the applciation from the command line with node index.js. Upon start up, the user is presented with the following list of options, each offering a different service:
 - View All Departments (Sorted by Name) = Presents the user with a table of all the department names
+
 - View All Roles (Sorted by Department Name) = Presents the user with a table of all the roles, the department that role belongs to and what the salary is.
+
 - View All Employees (Sorted by first name) = Presents the suer with a table of all of the employees. This includes their first and last name, title, department, salary, and manager's name. If the manager is blank, it means they are a manager.
+
 - Add a Department = User is asked which department they'd like to add. They aren't allowed to add a department with no name OR a department name that already exists. Upon completion, the terminal console logs a confirmation that the department has been added.
+
 - Add a Role = User is asked which role they'd like to add. They can not enter a role that already exists. Then they are asked for the salary of the employee, where they can only enter a number value or it will notify and reprompt the user. Then the user will be presented with a list of departments to add that role to. Upon completion, the terminal console logs a confirmation that the role has been added.
+
 - Add an Employee = User is asked to enter the employee's first name and then their last name. Then they are presented with a list of all the existing roles to pick from. Then they are presented with a list of managers (all employee's that don't have a manager of their own). They have the option to pick "none" if the new employee is a manager. Upon completion, the terminal console logs a confirmation that the employee has been added.
+
 - Update an Employee's Role = User is presented with a list of all employee's to update. After picking the employee to update, then they are presented with the list of all the roles to pick from. Upon completion, the terminal console logs a confirmation that the employee's role has been updated.
+
 - Update an EMployee's  Manager = User is presented with a list of all employee's to update. This includes those that are managers because their role could've changed and they no longer are a manager. After picking the employee to update, then they are presented with the list of all the managers. Upon completion, the terminal console logs a confirmation that the employee's manager has been updated.
 
 
@@ -42,6 +49,11 @@ Questions can be received on the [Github Repository](https://github.com/Wald14/e
 - [Stack Overflow](https://stackoverflow.com)
 
 ## Preview
-A video of the application in use can be accessed [here](). The following images share the application's apperance:
+A video of the application in use can be accessed: 
+[![A video thumbnail shows the command-line employee tracker application with a play button overlaying the view.](./images/video_screenshot.JPG)](https://drive.google.com/file/d/1eqhEVT8hFSlpdJTcdLLEeSquc-cU8fG1/view)
 
-![Image preview of ]()
+The following images share the application's apperance:
+
+![Image preview of the apps opening menu](./images/opening_screen.JPG)
+![Image preview of the apps opening menu](./images/example_of_table.JPG)
+![Image preview of the apps opening menu](./images/example_of_adding_employee.JPG)
